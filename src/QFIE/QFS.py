@@ -186,7 +186,12 @@ def compute_qc(backend, qc,  qc_label, n_shots, verbose=True,  transpilation_inf
             "Operations " + str(qc_label),
             transpiled_qc.count_ops(),
         )
-    print(transpiled_qc)
+        import sys
+        try:
+            print(transpiled_qc)
+        except UnicodeEncodeError:
+            sys.stdout.buffer.write(str(transpiled_qc).encode('utf-8'))
+            sys.stdout.buffer.write(b'\n')
     sampler = SamplerV2(backend)
     job = sampler.run([transpiled_qc], shots=n_shots)
     job_result = job.result()
